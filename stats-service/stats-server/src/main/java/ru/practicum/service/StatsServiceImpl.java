@@ -2,11 +2,11 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.dto.HitDto;
+import ru.practicum.dto.Stat;
 import ru.practicum.exception.InvalidPeriodException;
 import ru.practicum.mapper.StatsMapper;
 import ru.practicum.model.Endpoint;
-import ru.practicum.model.dto.HitDto;
-import ru.practicum.model.dto.Stat;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;

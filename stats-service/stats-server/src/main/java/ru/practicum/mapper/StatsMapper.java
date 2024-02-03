@@ -1,7 +1,7 @@
 package ru.practicum.mapper;
 
+import ru.practicum.dto.HitDto;
 import ru.practicum.model.Endpoint;
-import ru.practicum.model.dto.HitDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

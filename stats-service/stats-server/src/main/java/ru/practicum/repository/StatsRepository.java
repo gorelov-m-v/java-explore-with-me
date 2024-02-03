@@ -3,14 +3,14 @@ package ru.practicum.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import ru.practicum.dto.Stat;
 import ru.practicum.model.Endpoint;
-import ru.practicum.model.dto.Stat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatsRepository extends JpaRepository<Endpoint, Integer> {
-    @Query("SELECT new ru.practicum.model.dto.Stat(e.app, e.uri, COUNT(DISTINCT e.ip)) " +
+    @Query("SELECT new ru.practicum.dto.Stat(e.app, e.uri, COUNT(DISTINCT e.ip)) " +
             "FROM Endpoint AS e " +
             "WHERE e.dateTime BETWEEN :startDate AND :endDate " +
             "AND e.uri IN :uris " +
@@ -20,7 +20,7 @@ public interface StatsRepository extends JpaRepository<Endpoint, Integer> {
                                            @Param("endDate") LocalDateTime end,
                                            @Param("uris") List<String> uris);
 
-    @Query("SELECT new ru.practicum.model.dto.Stat(e.app, e.uri, COUNT(e)) " +
+    @Query("SELECT new ru.practicum.dto.Stat(e.app, e.uri, COUNT(e)) " +
             "FROM Endpoint AS e " +
             "WHERE e.dateTime BETWEEN :startDate AND :endDate " +
             "AND e.uri IN :uris " +
@@ -30,7 +30,7 @@ public interface StatsRepository extends JpaRepository<Endpoint, Integer> {
                                               @Param("endDate") LocalDateTime end,
                                               @Param("uris") List<String> uris);
 
-    @Query("SELECT new ru.practicum.model.dto.Stat(e.app, e.uri, COUNT(DISTINCT e.ip)) " +
+    @Query("SELECT new ru.practicum.dto.Stat(e.app, e.uri, COUNT(DISTINCT e.ip)) " +
             "FROM Endpoint AS e " +
             "WHERE e.dateTime BETWEEN :startDate AND :endDate " +
             "GROUP BY e.app, e.uri " +
@@ -38,7 +38,7 @@ public interface StatsRepository extends JpaRepository<Endpoint, Integer> {
     List<Stat> findUniqueStat(@Param("startDate") LocalDateTime start,
                               @Param("endDate") LocalDateTime end);
 
-    @Query("SELECT new ru.practicum.model.dto.Stat(e.app, e.uri, COUNT(e)) " +
+    @Query("SELECT new ru.practicum.dto.Stat(e.app, e.uri, COUNT(e)) " +
             "FROM Endpoint AS e " +
             "WHERE e.dateTime BETWEEN :startDate AND :endDate " +
             "GROUP BY e.app, e.uri " +

@@ -1,7 +1,7 @@
 package ru.practicum.client;
 
-import ru.practicum.model.dto.HitDto;
-import ru.practicum.model.dto.Stat;
+import ru.practicum.dto.HitDto;
+import ru.practicum.dto.Stat;
 
 import java.util.List;
 

@@ -12,8 +12,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.model.dto.HitDto;
-import ru.practicum.model.dto.Stat;
+import ru.practicum.dto.HitDto;
+import ru.practicum.dto.Stat;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

@@ -42,12 +42,10 @@ public class StatsController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        List<Stat> stats = statsService.get(
+        return statsService.get(
                 LocalDateTime.parse(start, formatter),
                 LocalDateTime.parse(end, formatter),
                 uris,
                 unique);
-
-        return stats;
     }
 }

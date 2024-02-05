@@ -9,5 +9,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <artifactId>stats-dto</artifactId>
 </project>

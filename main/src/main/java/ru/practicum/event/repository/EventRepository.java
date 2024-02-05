@@ -29,5 +29,68 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                     @Param("states") List<String> states,
                                     @Param("categories") List<Integer> categories,
                                     @Param("rangeStart") LocalDateTime rangeStart,
-                                    @Param("rangeEnd") LocalDateTime rangeEnd, Pageable page);
+                                    @Param("rangeEnd") LocalDateTime rangeEnd,
+                                    Pageable page);
+
+    @Query(" SELECT e " +
+            "FROM Event AS e " +
+            "WHERE (lower(e.annotation) LIKE LOWER(concat('%', :text,'%')) " +
+            "OR LOWER(e.description) LIKE LOWER(concat('%', :text,'%'))) " +
+            "AND e.category.id IN :categories AND e.paid = :paid AND e.eventDate > :now " +
+            "AND e.participantLimit > (" +
+            "   SELECT COUNT(p) " +
+            "   FROM ParticipationRequest p " +
+            "   WHERE p.event.id = e.id " +
+            "   AND p.status = CONFIRMED)")
+    List<Event> searchOnlyAvailableFutureEvents(@Param("text") String text,
+                                                @Param("categories") List<Integer> categories,
+                                                @Param("paid") Boolean paid,
+                                                @Param("now") LocalDateTime now,
+                                                Pageable page);
+
+    @Query(" SELECT e " +
+            "FROM Event AS e " +
+            "WHERE (LOWER(e.annotation) LIKE LOWER(concat('%', :text,'%')) " +
+            "OR LOWER(e.description) LIKE LOWER(concat('%', :text,'%'))) " +
+            "AND e.category.id IN :categories " +
+            "AND e.paid = :paid " +
+            "AND e.eventDate > :now")
+    List<Event> searchFutureEvents(@Param("text") String text,
+                                   @Param("categories") List<Integer> categories,
+                                   @Param("paid") Boolean paid,
+                                   @Param("now") LocalDateTime now,
+                                   Pageable page);
+
+    @Query(" SELECT e " +
+            "FROM Event AS e " +
+            "WHERE (LOWER(e.annotation) LIKE LOWER(concat('%', :text,'%')) " +
+            "OR LOWER(e.description) LIKE LOWER(concat('%', :text,'%'))) " +
+            "AND e.category.id IN :categories " +
+            "AND e.paid = :paid " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd " +
+            "AND e.participantLimit > (" +
+            "   SELECT count(p) " +
+            "   FROM ParticipationRequest AS p " +
+            "   WHERE p.event.id = e.id " +
+            "   AND p.status = CONFIRMED)")
+    List<Event> searchOnlyAvailableEventsWithDates(@Param("text") String text,
+                                                   @Param("categories") List<Integer> categories,
+                                                   @Param("paid") Boolean paid,
+                                                   @Param("rangeStart") LocalDateTime rangeStart,
+                                                   @Param("rangeEnd") LocalDateTime rangeEnd,
+                                                   Pageable page);
+
+    @Query(" SELECT e " +
+            "FROM Event AS e " +
+            "WHERE (LOWER(e.annotation) LIKE LOWER(concat('%', :text,'%')) " +
+            "OR LOWER(e.description) LIKE LOWER(concat('%', :text,'%'))) " +
+            "AND e.category.id IN :categories " +
+            "AND e.paid = :paid " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd")
+    List<Event> searchEventsWithDates(@Param("text") String text,
+                                      @Param("categories") List<Integer> categories,
+                                      @Param("paid") Boolean paid,
+                                      @Param("rangeStart") LocalDateTime rangeStart,
+                                      @Param("rangeEnd") LocalDateTime rangeEnd,
+                                      Pageable page);
 }

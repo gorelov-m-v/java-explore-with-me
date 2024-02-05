@@ -68,4 +68,10 @@ public class EventMapper {
         event.setState(EventState.PENDING);
         return event;
     }
+
+    public static List<EventFullDto> toFullDtoList(Collection<Event> events) {
+        return events.stream()
+                .map(EventMapper::toFullDto)
+                .collect(Collectors.toList());
+    }
 }

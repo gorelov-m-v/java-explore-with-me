@@ -1,15 +1,17 @@
 package ru.practicum.category.mapper;
 
-import org.mapstruct.Mapper;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.model.Category;
 
-@Mapper(componentModel = "spring")
-public interface CategoryMapper {
-    Category newCategoryDtoToCategory(NewCategoryDto newCategoryDto);
+public class CategoryMapper {
+    public static CategoryDto toDto(Category category) {
+        return new CategoryDto(category.getId(), category.getName());
+    }
 
-    Category categoryDtoToCategory(CategoryDto categoryDto);
-
-    CategoryDto toCategoryDto(Category category);
+    public static Category toEntity(NewCategoryDto dto) {
+        Category category = new Category();
+        category.setName(dto.getName());
+        return category;
+    }
 }

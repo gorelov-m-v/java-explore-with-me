@@ -2,6 +2,7 @@ package ru.practicum.ewm.main_service.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,6 +19,17 @@ public class ErrorHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFoundException(final NotFoundException exception) {
+        return new ApiError(HttpStatus.NOT_FOUND.name(),
+                "The required object was not found.",
+                exception.getMessage(),
+                getErrors(exception),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException exception) {
+
         return new ApiError(HttpStatus.NOT_FOUND.name(),
                 "The required object was not found.",
                 exception.getMessage(),

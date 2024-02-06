@@ -11,13 +11,10 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class NewUserRequest {
+
     @NotBlank
     @Email
-    @Min(6)
-    @Max(254)
     private String email;
     @NotBlank
-    @Min(2)
-    @Max(250)
     private String name;
 }

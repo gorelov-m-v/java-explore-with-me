@@ -7,7 +7,7 @@ import ru.practicum.ewm.main_service.user.dto.UserDto;
 import java.util.List;
 
 public interface AdminUsersService {
-    List<UserDto> getUsers(List<Integer> ids, PageRequest page);
+    List<UserDto> getAllUsers(List<Integer> ids, PageRequest page);
 
     UserDto saveUser(NewUserRequest request);
 

@@ -18,7 +18,7 @@ public class AdminUsersServiceImpl implements AdminUsersService {
     private final UserRepository userRepository;
 
     @Override
-    public List<UserDto> getUsers(List<Integer> ids, PageRequest page) {
+    public List<UserDto> getAllUsers(List<Integer> ids, PageRequest page) {
         List<User> users;
         if (ids == null || ids.isEmpty()) {
             users = userRepository.findAll(page).getContent();

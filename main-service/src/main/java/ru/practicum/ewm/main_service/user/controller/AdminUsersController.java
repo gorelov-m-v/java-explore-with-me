@@ -18,6 +18,7 @@ import ru.practicum.ewm.main_service.user.dto.UserDto;
 import ru.practicum.ewm.main_service.user.service.AdminUsersService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -28,19 +29,17 @@ public class AdminUsersController {
     private final AdminUsersService adminUsersService;
 
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam List<Integer> ids,
-                                  @RequestParam(defaultValue = "0") int from,
-                                  @RequestParam(defaultValue = "10") int size) {
+    public List<UserDto> getUsers(@RequestParam(required = false) List<Integer> ids,
+                                  @RequestParam(defaultValue = "0") @Min(0) int from,
+                                  @RequestParam(defaultValue = "10") @Min(1) int size) {
         PageRequest page = PageRequest.of(from / size, size);
-        List<UserDto> foundUsers = adminUsersService.getUsers(ids, page);
-        return foundUsers;
+        return adminUsersService.getAllUsers(ids, page);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto saveUser(@RequestBody @Valid NewUserRequest request) {
-        UserDto savedCategory = adminUsersService.saveUser(request);
-        return savedCategory;
+        return adminUsersService.saveUser(request);
     }
 
     @DeleteMapping("/{userId}")

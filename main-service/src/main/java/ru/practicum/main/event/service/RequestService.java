@@ -1,4 +1,4 @@
-package ru.practicum.main.services;
+package ru.practicum.main.event.service;
 
 
 import ru.practicum.main.dto.request.RequestDto;

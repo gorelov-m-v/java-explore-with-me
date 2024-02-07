@@ -1,4 +1,4 @@
-package ru.practicum.main.services.impl;
+package ru.practicum.main.event.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,13 +9,12 @@ import ru.practicum.main.dto.request.RequestStatusUpdateResult;
 import ru.practicum.main.event.model.enums.RequestStatus;
 import ru.practicum.main.event.model.enums.RequestStatusToUpdate;
 import ru.practicum.main.exceptions.*;
-import ru.practicum.main.mappers.RequestMapper;
+import ru.practicum.main.event.mapper.RequestMapper;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.model.Request;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.event.repository.RequestRepository;
 import ru.practicum.main.user.repository.UserRepository;
-import ru.practicum.main.services.RequestService;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -12,7 +12,7 @@ import ru.practicum.main.dto.request.RequestDto;
 import ru.practicum.main.dto.request.RequestStatusUpdateDto;
 import ru.practicum.main.dto.request.RequestStatusUpdateResult;
 import ru.practicum.main.event.service.EventService;
-import ru.practicum.main.services.RequestService;
+import ru.practicum.main.event.service.RequestService;
 
 import javax.validation.Valid;
 import java.util.List;

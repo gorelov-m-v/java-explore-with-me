@@ -1,4 +1,4 @@
-package ru.practicum.main;
+package ru.practicum.main.exceptions;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import ru.practicum.main.exceptions.*;
-import ru.practicum.main.models.ApiError;
 import ru.practicum.main.constants.Pattern;
 
 import java.time.LocalDateTime;

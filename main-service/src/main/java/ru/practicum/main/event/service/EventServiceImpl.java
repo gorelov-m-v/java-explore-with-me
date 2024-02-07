@@ -21,9 +21,9 @@ import ru.practicum.main.event.model.enums.StateActionForUser;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.exceptions.*;
-import ru.practicum.main.models.Category;
+import ru.practicum.main.category.model.Category;
 import ru.practicum.main.user.model.User;
-import ru.practicum.main.repositories.CategoryRepository;
+import ru.practicum.main.category.repository.CategoryRepository;
 import ru.practicum.main.user.repository.UserRepository;
 
 import javax.persistence.EntityManager;

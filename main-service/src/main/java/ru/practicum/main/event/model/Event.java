@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.main.event.model.enums.EventState;
 import ru.practicum.main.constants.Pattern;
-import ru.practicum.main.models.Category;
+import ru.practicum.main.category.model.Category;
 import ru.practicum.main.user.model.User;
 
 import javax.persistence.*;

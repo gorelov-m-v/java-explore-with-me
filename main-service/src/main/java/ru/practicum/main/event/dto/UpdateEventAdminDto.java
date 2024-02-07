@@ -1,12 +1,12 @@
-package ru.practicum.main.event;
+package ru.practicum.main.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.main.event.enums.StateActionForAdmin;
-import ru.practicum.main.event.Location;
+import ru.practicum.main.event.model.enums.StateActionForAdmin;
+import ru.practicum.main.event.model.Location;
 import ru.practicum.main.constants.Pattern;
 
 import javax.validation.constraints.Size;

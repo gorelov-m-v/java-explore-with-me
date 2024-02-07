@@ -1,12 +1,12 @@
-package ru.practicum.main.event;
+package ru.practicum.main.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.main.event.EventFullDto;
-import ru.practicum.main.event.UpdateEventAdminDto;
-import ru.practicum.main.event.enums.EventState;
-import ru.practicum.main.event.EventService;
+import ru.practicum.main.event.dto.EventFullDto;
+import ru.practicum.main.event.dto.UpdateEventAdminDto;
+import ru.practicum.main.event.model.enums.EventState;
+import ru.practicum.main.event.service.EventService;
 
 import javax.validation.Valid;
 import java.util.List;

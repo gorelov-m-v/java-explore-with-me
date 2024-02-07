@@ -1,10 +1,10 @@
-package ru.practicum.main.event;
+package ru.practicum.main.event.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.main.event.enums.EventState;
+import ru.practicum.main.event.model.enums.EventState;
 import ru.practicum.main.constants.Pattern;
 import ru.practicum.main.models.Category;
 import ru.practicum.main.user.model.User;

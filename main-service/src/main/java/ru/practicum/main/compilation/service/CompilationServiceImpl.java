@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.practicum.main.compilation.dto.CompilationDto;
 import ru.practicum.main.compilation.dto.NewCompilationDto;
 import ru.practicum.main.compilation.dto.UpdateCompilationRequest;
-import ru.practicum.main.exceptions.CompilationNotExistException;
 import ru.practicum.main.compilation.mapper.CompilationMapper;
 import ru.practicum.main.compilation.model.Compilation;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.compilation.repository.CompilationRepository;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.event.service.EventService;
+import ru.practicum.main.exceptions.NotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -60,7 +60,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     public CompilationDto getCompilation(Long compId) {
-        Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> new CompilationNotExistException("Compilation doesn't exist"));
+        Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> new NotFoundException("Compilation doesn't exist"));
         return mapper.mapToCompilationDto(compilation);
     }
 
@@ -94,7 +94,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
 
-        Compilation oldCompilation = compilationRepository.findById(compId).orElseThrow(() -> new CompilationNotExistException("Can't update compilation - the compilation doesn't exist"));
+        Compilation oldCompilation = compilationRepository.findById(compId).orElseThrow(() -> new NotFoundException("Can't update compilation - the compilation doesn't exist"));
         List<Long> eventsIds = updateCompilationRequest.getEvents();
         if (eventsIds != null) {
             List<Event> events = eventRepository.findAllByIdIn(updateCompilationRequest.getEvents());

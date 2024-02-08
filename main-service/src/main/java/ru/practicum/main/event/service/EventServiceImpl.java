@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
         Category category = categoryRepository.findById(newEventDto.getCategory())
-                .orElseThrow(() -> new CategoryNotExistException(""));
+                .orElseThrow(() -> new NotFoundException(""));
         LocalDateTime eventDate = newEventDto.getEventDate();
         if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
             throw new WrongTimeException("eventDate: Должно содержать еще не наступившую дату." + eventDate);
@@ -60,7 +60,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventMapper.toEventModel(newEventDto);
         event.setCategory(category);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotExistException(String.format("Пользователя с id = %s не существует.", userId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id = %s не существует.", userId)));
         event.setInitiator(user);
         return eventMapper.toEventFullDto(eventRepository.save(event));
     }
@@ -73,7 +73,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEvent(Long eventId, UpdateEventAdminDto updateEventAdminDto) {
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotExistException(String.format(
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(String.format(
                 "Ивента с id = %s не существует.", eventId)));
         if (updateEventAdminDto == null) {
             return eventMapper.toEventFullDto(event);
@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
             event.setAnnotation(updateEventAdminDto.getAnnotation());
         }
         if (updateEventAdminDto.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventAdminDto.getCategory()).orElseThrow(() -> new CategoryNotExistException(""));
+            Category category = categoryRepository.findById(updateEventAdminDto.getCategory()).orElseThrow(() -> new NotFoundException(""));
             event.setCategory(category);
         }
         if (updateEventAdminDto.getDescription() != null) {
@@ -106,16 +106,16 @@ public class EventServiceImpl implements EventService {
         if (updateEventAdminDto.getStateAction() != null) {
             if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.PUBLISH_EVENT)) {
                 if (event.getPublishedOn() != null) {
-                    throw new AlreadyPublishedException("Ивент уже опубликован.");
+                    throw new ConflictException("Ивент уже опубликован.");
                 }
                 if (event.getState().equals(EventState.CANCELED)) {
-                    throw new EventAlreadyCanceledException("Ивент уже отменен.");
+                    throw new ConflictException("Ивент уже отменен.");
                 }
                 event.setState(EventState.PUBLISHED);
                 event.setPublishedOn(LocalDateTime.now());
             } else if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.REJECT_EVENT)) {
                 if (event.getPublishedOn() != null) {
-                    throw new AlreadyPublishedException("Нельзя отменить опубликованный ивент.");
+                    throw new ConflictException("Нельзя отменить опубликованный ивент.");
                 }
                 event.setState(EventState.CANCELED);
             }
@@ -133,10 +133,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserDto updateEventUserDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new EventNotExistException(""));
+                .orElseThrow(() -> new NotFoundException(""));
 
         if (event.getPublishedOn() != null) {
-            throw new AlreadyPublishedException("Ивент уже опубликован.");
+            throw new ConflictException("Ивент уже опубликован.");
         }
         if (updateEventUserDto == null) {
             return eventMapper.toEventFullDto(event);
@@ -145,7 +145,7 @@ public class EventServiceImpl implements EventService {
             event.setAnnotation(updateEventUserDto.getAnnotation());
         }
         if (updateEventUserDto.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventUserDto.getCategory()).orElseThrow(() -> new CategoryNotExistException(""));
+            Category category = categoryRepository.findById(updateEventUserDto.getCategory()).orElseThrow(() -> new NotFoundException(""));
             event.setCategory(category);
         }
         if (updateEventUserDto.getDescription() != null) {
@@ -186,7 +186,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventByUser(Long userId, Long eventId) {
-        return eventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> new EventNotExistException("")));
+        return eventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> new NotFoundException("")));
     }
 
     @Override
@@ -321,7 +321,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEvent(Long id, HttpServletRequest request) {
-        Event event = eventRepository.findByIdAndPublishedOnIsNotNull(id).orElseThrow(() -> new EventNotExistException(String.format("Can't find event with id = %s event doesn't exist", id)));
+        Event event = eventRepository.findByIdAndPublishedOnIsNotNull(id).orElseThrow(() -> new NotFoundException(String.format("Can't find event with id = %s event doesn't exist", id)));
         setView(event);
         sendStat(event, request);
         return eventMapper.toEventFullDto(event);

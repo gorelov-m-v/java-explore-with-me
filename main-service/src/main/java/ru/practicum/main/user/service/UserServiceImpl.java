@@ -3,7 +3,7 @@ package ru.practicum.main.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.main.exceptions.NameAlreadyExistException;
+import ru.practicum.main.exceptions.ConflictException;
 import ru.practicum.main.user.dto.UserDto;
 import ru.practicum.main.user.mapper.UserMapper;
 import ru.practicum.main.user.repository.UserRepository;
@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         if (userRepository.existsByName(userDto.getName())) {
-            throw new NameAlreadyExistException(String.format("Пользователь с именем: %s, уже существует.",
+            throw new ConflictException(String.format("Пользователь с именем: %s, уже существует.",
                     userDto.getName()));
         }
         return userMapper.toUserDto(userRepository.save(userMapper.toUserModel(userDto)));

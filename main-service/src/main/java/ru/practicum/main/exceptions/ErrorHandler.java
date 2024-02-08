@@ -55,4 +55,12 @@ public class ErrorHandler {
         return new ApiError("It is impossible to do the operation", "data not found",
                 HttpStatus.NOT_FOUND.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ApiError handleNotFoundException(final NotFoundException exception) {
+        return new ApiError("It is impossible to do the operation", "data not found",
+                HttpStatus.NOT_FOUND.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
 }

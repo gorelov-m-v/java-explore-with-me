@@ -9,6 +9,7 @@ import ru.practicum.main.constants.Pattern;
 import ru.practicum.main.event.model.Location;
 import ru.practicum.main.event.model.enums.StateActionForUser;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -26,6 +27,7 @@ public class UpdateEventUserDto {
     private LocalDateTime eventDate;
     private Location location;
     private Boolean paid;
+    @Min(0)
     private Long participantLimit;
     private Boolean requestModeration;
     private StateActionForUser stateAction;

@@ -1,19 +1,18 @@
 package ru.practicum.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class HitDto {
-    private Integer id;
-    @NonNull
+@AllArgsConstructor
+@NoArgsConstructor
+public class EndpointHitDto {
+    private Long id;
     private String app;
-    @NonNull
     private String uri;
-    @NonNull
     private String ip;
-    @NonNull
     private String timestamp;
 }

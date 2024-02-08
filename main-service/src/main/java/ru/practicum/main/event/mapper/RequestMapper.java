@@ -1,7 +1,7 @@
 package ru.practicum.main.event.mapper;
 
 import org.mapstruct.Mapper;
-import ru.practicum.main.dto.request.RequestDto;
+import ru.practicum.main.event.dto.RequestDto;
 import ru.practicum.main.event.model.Request;
 
 import java.util.List;

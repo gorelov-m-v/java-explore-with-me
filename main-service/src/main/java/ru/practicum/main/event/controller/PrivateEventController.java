@@ -8,9 +8,9 @@ import ru.practicum.main.event.dto.EventFullDto;
 import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.UpdateEventUserDto;
-import ru.practicum.main.dto.request.RequestDto;
-import ru.practicum.main.dto.request.RequestStatusUpdateDto;
-import ru.practicum.main.dto.request.RequestStatusUpdateResult;
+import ru.practicum.main.event.dto.RequestDto;
+import ru.practicum.main.event.dto.RequestStatusUpdateDto;
+import ru.practicum.main.event.dto.RequestStatusUpdateResult;
 import ru.practicum.main.event.service.EventService;
 import ru.practicum.main.event.service.RequestService;
 

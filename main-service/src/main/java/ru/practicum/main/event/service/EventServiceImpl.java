@@ -19,8 +19,6 @@ import ru.practicum.main.event.mapper.EventMapper;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.model.enums.EventState;
 import ru.practicum.main.event.model.enums.SortValue;
-import ru.practicum.main.event.model.enums.StateActionForAdmin;
-import ru.practicum.main.event.model.enums.StateActionForUser;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.exceptions.ConflictException;
 import ru.practicum.main.exceptions.NotFoundException;
@@ -58,7 +56,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
         Category category = categoryRepository.findById(newEventDto.getCategory())
-                .orElseThrow(() -> new NotFoundException(""));
+                .orElseThrow(() -> new NotFoundException("Категория не найдена."));
         LocalDateTime eventDate = newEventDto.getEventDate();
         if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
             throw new WrongTimeException("eventDate: Должно содержать еще не наступившую дату." + eventDate);
@@ -81,118 +79,34 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEvent(Long eventId, UpdateEventAdminDto updateEventAdminDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(String.format(
                 "Ивента с id = %s не существует.", eventId)));
+
         if (updateEventAdminDto == null) {
             return eventMapper.toEventFullDto(event);
         }
-        if (updateEventAdminDto.getAnnotation() != null) {
-            event.setAnnotation(updateEventAdminDto.getAnnotation());
-        }
-        if (updateEventAdminDto.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventAdminDto.getCategory()).orElseThrow(() -> new NotFoundException(""));
-            event.setCategory(category);
-        }
-        if (updateEventAdminDto.getDescription() != null) {
-            event.setDescription(updateEventAdminDto.getDescription());
-        }
-        if (updateEventAdminDto.getLocation() != null) {
-            event.setLocation(updateEventAdminDto.getLocation());
-        }
-        if (updateEventAdminDto.getPaid() != null) {
-            event.setPaid(updateEventAdminDto.getPaid());
-        }
-        if (updateEventAdminDto.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventAdminDto.getParticipantLimit().intValue());
-        }
-        if (updateEventAdminDto.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventAdminDto.getRequestModeration());
-        }
-        if (updateEventAdminDto.getTitle() != null) {
-            event.setTitle(updateEventAdminDto.getTitle());
-        }
-        if (updateEventAdminDto.getStateAction() != null) {
-            if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.PUBLISH_EVENT)) {
-                if (event.getPublishedOn() != null) {
-                    throw new ConflictException("Ивент уже опубликован.");
-                }
-                if (event.getState().equals(EventState.CANCELED)) {
-                    throw new ConflictException("Ивент уже отменен.");
-                }
-                event.setState(EventState.PUBLISHED);
-                event.setPublishedOn(LocalDateTime.now());
-            } else if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.REJECT_EVENT)) {
-                if (event.getPublishedOn() != null) {
-                    throw new ConflictException("Нельзя отменить опубликованный ивент.");
-                }
-                event.setState(EventState.CANCELED);
-            }
-        }
-        if (updateEventAdminDto.getEventDate() != null) {
-            LocalDateTime eventDateTime = updateEventAdminDto.getEventDate();
-            if (eventDateTime.isBefore(LocalDateTime.now().plusHours(2))) {
-                throw new WrongTimeException("Нельзя изменить дату ивента за час до начала.");
-            }
-            event.setEventDate(updateEventAdminDto.getEventDate());
-        }
-        return eventMapper.toEventFullDto(eventRepository.save(event));
+
+        return eventMapper.toEventFullDto(eventRepository.save(
+                eventMapper.toEventByAdmin(updateEventAdminDto, event)));
     }
 
     @Override
     public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserDto updateEventUserDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException(""));
-
         if (event.getPublishedOn() != null) {
             throw new ConflictException("Ивент уже опубликован.");
         }
         if (updateEventUserDto == null) {
             return eventMapper.toEventFullDto(event);
         }
-        if (updateEventUserDto.getAnnotation() != null) {
-            event.setAnnotation(updateEventUserDto.getAnnotation());
-        }
-        if (updateEventUserDto.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventUserDto.getCategory()).orElseThrow(() -> new NotFoundException(""));
-            event.setCategory(category);
-        }
-        if (updateEventUserDto.getDescription() != null) {
-            event.setDescription(updateEventUserDto.getDescription());
-        }
-        if (updateEventUserDto.getEventDate() != null) {
-            LocalDateTime eventDateTime = updateEventUserDto.getEventDate();
-            if (eventDateTime.isBefore(LocalDateTime.now().plusHours(2))) {
-                throw new WrongTimeException("Нельзя изменить дату ивента за час до начала.");
-            }
-            event.setEventDate(updateEventUserDto.getEventDate());
-        }
-        if (updateEventUserDto.getLocation() != null) {
-            event.setLocation(updateEventUserDto.getLocation());
-        }
-        if (updateEventUserDto.getPaid() != null) {
-            event.setPaid(updateEventUserDto.getPaid());
-        }
-        if (updateEventUserDto.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventUserDto.getParticipantLimit().intValue());
-        }
-        if (updateEventUserDto.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventUserDto.getRequestModeration());
-        }
-        if (updateEventUserDto.getTitle() != null) {
-            event.setTitle(updateEventUserDto.getTitle());
-        }
 
-        if (updateEventUserDto.getStateAction() != null) {
-            if (updateEventUserDto.getStateAction().equals(StateActionForUser.SEND_TO_REVIEW)) {
-                event.setState(EventState.PENDING);
-            } else {
-                event.setState(EventState.CANCELED);
-            }
-        }
-        return eventMapper.toEventFullDto(eventRepository.save(event));
+        return eventMapper.toEventFullDto(eventRepository.save(
+                eventMapper.toEventByUser(updateEventUserDto, event)));
     }
 
     @Override
     public EventFullDto getEventByUser(Long userId, Long eventId) {
-        return eventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> new NotFoundException("")));
+        return eventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(
+                eventId, userId).orElseThrow(() -> new NotFoundException("Ивента не найдено.")));
     }
 
     @Override
@@ -321,7 +235,7 @@ public class EventServiceImpl implements EventService {
         }
 
         setView(events);
-        sendStat(events, request);
+        events.forEach(e -> sendStat(e, request));
         return eventMapper.toEventFullDtoList(events);
     }
 
@@ -340,47 +254,10 @@ public class EventServiceImpl implements EventService {
 
         EndpointHitDto requestDto = new EndpointHitDto();
         requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events");
+        requestDto.setUri("/events/" + event.getId());
         requestDto.setApp(nameService);
         requestDto.setIp(remoteAddr);
         statClient.addStats(requestDto);
-        sendStatForTheEvent(event.getId(), remoteAddr, now, nameService);
-    }
-
-    public void sendStat(List<Event> events, HttpServletRequest request) {
-        LocalDateTime now = LocalDateTime.now();
-        String remoteAddr = request.getRemoteAddr();
-        String nameService = "main-service";
-
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events");
-        requestDto.setApp(nameService);
-        requestDto.setIp(request.getRemoteAddr());
-        statClient.addStats(requestDto);
-        sendStatForEveryEvent(events, remoteAddr, LocalDateTime.now(), nameService);
-    }
-
-    private void sendStatForTheEvent(Long eventId, String remoteAddr, LocalDateTime now,
-                                     String nameService) {
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events/" + eventId);
-        requestDto.setApp(nameService);
-        requestDto.setIp(remoteAddr);
-        statClient.addStats(requestDto);
-    }
-
-    private void sendStatForEveryEvent(List<Event> events, String remoteAddr, LocalDateTime now,
-                                       String nameService) {
-        for (Event event : events) {
-            EndpointHitDto requestDto = new EndpointHitDto();
-            requestDto.setTimestamp(now.format(dateFormatter));
-            requestDto.setUri("/events/" + event.getId());
-            requestDto.setApp(nameService);
-            requestDto.setIp(remoteAddr);
-            statClient.addStats(requestDto);
-        }
     }
 
     public void setView(List<Event> events) {

@@ -248,53 +248,22 @@ public class EventServiceImpl implements EventService {
     }
 
     public void sendStat(Event event, HttpServletRequest request) {
-        LocalDateTime now = LocalDateTime.now();
-        String remoteAddr = request.getRemoteAddr();
-        String nameService = "main-service";
-
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events");
-        requestDto.setApp(nameService);
-        requestDto.setIp(remoteAddr);
-        statClient.addStats(requestDto);
-        sendStatForTheEvent(event.getId(), remoteAddr, now, nameService);
+        statClient.addStats(createEndpoint(request));
+        sendStatForTheEvent(event, request.getRemoteAddr(), LocalDateTime.now());
     }
 
     public void sendStat(List<Event> events, HttpServletRequest request) {
-        LocalDateTime now = LocalDateTime.now();
-        String remoteAddr = request.getRemoteAddr();
-        String nameService = "main-service";
-
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events");
-        requestDto.setApp(nameService);
-        requestDto.setIp(request.getRemoteAddr());
-        statClient.addStats(requestDto);
-        sendStatForEveryEvent(events, remoteAddr, LocalDateTime.now(), nameService);
+        statClient.addStats(createEndpoint(request));
+        sendStatForEveryEvent(events, request.getRemoteAddr(), LocalDateTime.now());
     }
 
-    private void sendStatForTheEvent(Long eventId, String remoteAddr, LocalDateTime now,
-                                     String nameService) {
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events/" + eventId);
-        requestDto.setApp(nameService);
-        requestDto.setIp(remoteAddr);
+    private void sendStatForTheEvent(Event event, String remoteAddr, LocalDateTime now) {
+        EndpointHitDto requestDto = createEndpoint(event, remoteAddr, now);
         statClient.addStats(requestDto);
     }
 
-    private void sendStatForEveryEvent(List<Event> events, String remoteAddr, LocalDateTime now,
-                                       String nameService) {
-        for (Event event : events) {
-            EndpointHitDto requestDto = new EndpointHitDto();
-            requestDto.setTimestamp(now.format(dateFormatter));
-            requestDto.setUri("/events/" + event.getId());
-            requestDto.setApp(nameService);
-            requestDto.setIp(remoteAddr);
-            statClient.addStats(requestDto);
-        }
+    private void sendStatForEveryEvent(List<Event> events, String remoteAddr, LocalDateTime now) {
+        events.forEach(e -> statClient.addStats(createEndpoint(e, remoteAddr, now)));
     }
 
     public void setView(List<Event> events) {
@@ -331,6 +300,43 @@ public class EventServiceImpl implements EventService {
         } else {
             event.setViews(1L);
         }
+    }
+
+    private EndpointHitDto createEndpoint(HttpServletRequest request) {
+        LocalDateTime now = LocalDateTime.now();
+        String remoteAddr = request.getRemoteAddr();
+        String nameService = "main-service";
+
+        EndpointHitDto requestDto = new EndpointHitDto();
+        requestDto.setTimestamp(now.format(dateFormatter));
+        requestDto.setUri("/events");
+        requestDto.setApp(nameService);
+        requestDto.setIp(remoteAddr);
+
+        return requestDto;
+    }
+
+    private EndpointHitDto createEndpoint(Event event, String remoteAddr, LocalDateTime now) {
+        EndpointHitDto requestDto = new EndpointHitDto();
+        requestDto.setTimestamp(now.format(dateFormatter));
+        requestDto.setUri("/events/" + event.getId());
+        requestDto.setApp("main-service");
+        requestDto.setIp(remoteAddr);
+        return requestDto;
+    }
+
+    private EndpointHitDto createEndpoint(HttpServletRequest request, Event event) {
+        LocalDateTime now = LocalDateTime.now();
+        String remoteAddr = request.getRemoteAddr();
+        String nameService = "main-service";
+
+        EndpointHitDto requestDto = new EndpointHitDto();
+        requestDto.setTimestamp(now.format(dateFormatter));
+        requestDto.setUri("/events" + event.getId());
+        requestDto.setApp(nameService);
+        requestDto.setIp(remoteAddr);
+
+        return requestDto;
     }
 
     private List<ViewStatsDto> getStats(String startTime, String endTime, List<String> uris) {

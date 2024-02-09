@@ -235,7 +235,7 @@ public class EventServiceImpl implements EventService {
         }
 
         setView(events);
-        events.forEach(e -> sendStat(e, request));
+        sendStat(events, request);
         return eventMapper.toEventFullDtoList(events);
     }
 

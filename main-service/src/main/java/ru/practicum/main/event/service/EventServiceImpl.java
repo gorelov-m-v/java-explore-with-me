@@ -254,10 +254,47 @@ public class EventServiceImpl implements EventService {
 
         EndpointHitDto requestDto = new EndpointHitDto();
         requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events/" + event.getId());
+        requestDto.setUri("/events");
         requestDto.setApp(nameService);
         requestDto.setIp(remoteAddr);
         statClient.addStats(requestDto);
+        sendStatForTheEvent(event.getId(), remoteAddr, now, nameService);
+    }
+
+    public void sendStat(List<Event> events, HttpServletRequest request) {
+        LocalDateTime now = LocalDateTime.now();
+        String remoteAddr = request.getRemoteAddr();
+        String nameService = "main-service";
+
+        EndpointHitDto requestDto = new EndpointHitDto();
+        requestDto.setTimestamp(now.format(dateFormatter));
+        requestDto.setUri("/events");
+        requestDto.setApp(nameService);
+        requestDto.setIp(request.getRemoteAddr());
+        statClient.addStats(requestDto);
+        sendStatForEveryEvent(events, remoteAddr, LocalDateTime.now(), nameService);
+    }
+
+    private void sendStatForTheEvent(Long eventId, String remoteAddr, LocalDateTime now,
+                                     String nameService) {
+        EndpointHitDto requestDto = new EndpointHitDto();
+        requestDto.setTimestamp(now.format(dateFormatter));
+        requestDto.setUri("/events/" + eventId);
+        requestDto.setApp(nameService);
+        requestDto.setIp(remoteAddr);
+        statClient.addStats(requestDto);
+    }
+
+    private void sendStatForEveryEvent(List<Event> events, String remoteAddr, LocalDateTime now,
+                                       String nameService) {
+        for (Event event : events) {
+            EndpointHitDto requestDto = new EndpointHitDto();
+            requestDto.setTimestamp(now.format(dateFormatter));
+            requestDto.setUri("/events/" + event.getId());
+            requestDto.setApp(nameService);
+            requestDto.setIp(remoteAddr);
+            statClient.addStats(requestDto);
+        }
     }
 
     public void setView(List<Event> events) {

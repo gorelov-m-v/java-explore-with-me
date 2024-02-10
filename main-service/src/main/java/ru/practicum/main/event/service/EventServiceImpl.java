@@ -21,6 +21,7 @@ import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.model.enums.EventState;
 import ru.practicum.main.event.model.enums.SortValue;
 import ru.practicum.main.event.model.enums.StateActionForAdmin;
+import ru.practicum.main.event.model.enums.StateActionForUser;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.exceptions.ConflictException;
 import ru.practicum.main.exceptions.NotFoundException;
@@ -114,6 +115,7 @@ public class EventServiceImpl implements EventService {
                 throw new WrongTimeException("Нельзя изменить дату ивента за час до начала.");
             }
         }
+
         return eventMapper.toEventFullDto(eventRepository.save(
                 testMapper.toEventByAdmin(updateEventAdminDto, event, category)));
     }
@@ -124,17 +126,12 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Ивент не найден."));
         Category category = null;
 
-        if (event.getPublishedOn() != null) {
-            throw new ConflictException("Ивент уже опубликован.");
-        }
-
         if (updateEventUserDto == null) {
             return eventMapper.toEventFullDto(event);
         }
 
-        if (updateEventUserDto.getCategory() != null) {
-            category = categoryRepository.findById(updateEventUserDto.getCategory())
-                    .orElseThrow(() -> new NotFoundException("Категория не найдена."));
+        if (updateEventUserDto.getStateAction() != StateActionForUser.SEND_TO_REVIEW && event.getPublishedOn() != null) {
+            throw new ConflictException("Ивент уже опубликован.");
         }
 
         if (updateEventUserDto.getCategory() != null) {
@@ -148,8 +145,6 @@ public class EventServiceImpl implements EventService {
                 throw new WrongTimeException("Нельзя изменить дату ивента за час до начала.");
             }
         }
-        System.out.println(event);
-        System.out.println(updateEventUserDto);
 
         return eventMapper.toEventFullDto(eventRepository.save(
                 testMapper.toEventByUser(updateEventUserDto, event, category)));

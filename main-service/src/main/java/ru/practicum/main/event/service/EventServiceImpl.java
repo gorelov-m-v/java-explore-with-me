@@ -19,6 +19,7 @@ import ru.practicum.main.event.mapper.EventMapper;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.model.enums.EventState;
 import ru.practicum.main.event.model.enums.SortValue;
+import ru.practicum.main.event.model.enums.StateActionForAdmin;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.exceptions.ConflictException;
 import ru.practicum.main.exceptions.NotFoundException;
@@ -79,28 +80,70 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEvent(Long eventId, UpdateEventAdminDto updateEventAdminDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(String.format(
                 "Ивента с id = %s не существует.", eventId)));
+        Category category = null;
 
         if (updateEventAdminDto == null) {
             return eventMapper.toEventFullDto(event);
         }
 
+        if (updateEventAdminDto.getCategory() != null) {
+            category = categoryRepository.findById(updateEventAdminDto.getCategory())
+                    .orElseThrow(() -> new NotFoundException("Категория не найдена."));
+        }
+
+        if (updateEventAdminDto.getStateAction() != null) {
+            if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.PUBLISH_EVENT)) {
+                if (event.getPublishedOn() != null) {
+                    throw new ConflictException("Ивент уже опубликован.");
+                }
+                if (event.getState().equals(EventState.CANCELED)) {
+                    throw new ConflictException("Ивент уже отменен.");
+                }
+            } else if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.REJECT_EVENT)) {
+                if (event.getPublishedOn() != null) {
+                    throw new ConflictException("Нельзя отменить опубликованный ивент.");
+                }
+            }
+        }
+
+        if (updateEventAdminDto.getEventDate() != null) {
+            LocalDateTime eventDateTime = updateEventAdminDto.getEventDate();
+            if (eventDateTime.isBefore(LocalDateTime.now().plusHours(2))) {
+                throw new WrongTimeException("Нельзя изменить дату ивента за час до начала.");
+            }
+        }
         return eventMapper.toEventFullDto(eventRepository.save(
-                eventMapper.toEventByAdmin(updateEventAdminDto, event)));
+                eventMapper.toEventByAdmin(updateEventAdminDto, event, category)));
     }
 
     @Override
     public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserDto updateEventUserDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new NotFoundException(""));
+                .orElseThrow(() -> new NotFoundException("Ивент не найден."));
+        Category category = null;
+
         if (event.getPublishedOn() != null) {
             throw new ConflictException("Ивент уже опубликован.");
         }
+
         if (updateEventUserDto == null) {
             return eventMapper.toEventFullDto(event);
         }
 
+        if (updateEventUserDto.getCategory() != null) {
+            category = categoryRepository.findById(updateEventUserDto.getCategory())
+                    .orElseThrow(() -> new NotFoundException("Категория не найдена."));
+        }
+
+        if (updateEventUserDto.getEventDate() != null) {
+            LocalDateTime eventDateTime = updateEventUserDto.getEventDate();
+            if (eventDateTime.isBefore(LocalDateTime.now().plusHours(2))) {
+                throw new WrongTimeException("Нельзя изменить дату ивента за час до начала.");
+            }
+        }
+
         return eventMapper.toEventFullDto(eventRepository.save(
-                eventMapper.toEventByUser(updateEventUserDto, event)));
+                eventMapper.toEventByUser(updateEventUserDto, event, category)));
     }
 
     @Override

@@ -16,6 +16,7 @@ import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.UpdateEventAdminDto;
 import ru.practicum.main.event.dto.UpdateEventUserDto;
 import ru.practicum.main.event.mapper.EventMapper;
+import ru.practicum.main.event.mapper.TestMapper;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.model.enums.EventState;
 import ru.practicum.main.event.model.enums.SortValue;
@@ -48,6 +49,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
+    private final TestMapper testMapper;
     private final UserRepository userRepository;
     private final StatClient statClient;
     private final EntityManager entityManager;
@@ -113,7 +115,7 @@ public class EventServiceImpl implements EventService {
             }
         }
         return eventMapper.toEventFullDto(eventRepository.save(
-                eventMapper.toEventByAdmin(updateEventAdminDto, event, category)));
+                testMapper.toEventByAdmin(updateEventAdminDto, event, category)));
     }
 
     @Override
@@ -135,15 +137,22 @@ public class EventServiceImpl implements EventService {
                     .orElseThrow(() -> new NotFoundException("Категория не найдена."));
         }
 
+        if (updateEventUserDto.getCategory() != null) {
+            category = categoryRepository.findById(updateEventUserDto.getCategory())
+                    .orElseThrow(() -> new NotFoundException("Категория не найдена."));
+        }
+
         if (updateEventUserDto.getEventDate() != null) {
             LocalDateTime eventDateTime = updateEventUserDto.getEventDate();
             if (eventDateTime.isBefore(LocalDateTime.now().plusHours(2))) {
                 throw new WrongTimeException("Нельзя изменить дату ивента за час до начала.");
             }
         }
+        System.out.println(event);
+        System.out.println(updateEventUserDto);
 
         return eventMapper.toEventFullDto(eventRepository.save(
-                eventMapper.toEventByUser(updateEventUserDto, event, category)));
+                testMapper.toEventByUser(updateEventUserDto, event, category)));
     }
 
     @Override

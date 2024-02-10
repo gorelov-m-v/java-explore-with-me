@@ -61,7 +61,7 @@ public class Event {
     private String title;
     private Long views;
 
-    public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn, String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid, Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, EventState eventState, String title, Long views) {
+    public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn, String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid, int participantLimit, LocalDateTime publishedOn, Boolean requestModeration, EventState eventState, String title, Long views) {
         this.annotation = annotation;
         this.category = category;
         this.confirmedRequests = confirmedRequests;
@@ -93,4 +93,27 @@ public class Event {
         this.views = views;
     }
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "datePattern='" + datePattern + '\'' +
+                ", dateFormatter=" + dateFormatter +
+                ", id=" + id +
+                ", annotation='" + annotation + '\'' +
+                ", category=" + category +
+                ", confirmedRequests=" + confirmedRequests +
+                ", createdOn=" + createdOn +
+                ", description='" + description + '\'' +
+                ", eventDate=" + eventDate +
+                ", initiator=" + initiator +
+                ", location=" + location +
+                ", paid=" + paid +
+                ", participantLimit=" + participantLimit +
+                ", publishedOn=" + publishedOn +
+                ", requestModeration=" + requestModeration +
+                ", state=" + state +
+                ", title='" + title + '\'' +
+                ", views=" + views +
+                '}';
+    }
 }

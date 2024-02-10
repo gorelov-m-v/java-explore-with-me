@@ -55,6 +55,9 @@ public abstract class EventMapper {
         if (updateEventAdminDto.getTitle() != null) {
             event.setTitle(updateEventAdminDto.getTitle());
         }
+        if (updateEventAdminDto.getEventDate() != null) {
+            event.setEventDate(updateEventAdminDto.getEventDate());
+        }
         if (updateEventAdminDto.getStateAction() != null) {
             if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.PUBLISH_EVENT)) {
                 event.setState(EventState.PUBLISHED);
@@ -62,9 +65,6 @@ public abstract class EventMapper {
             } else if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.REJECT_EVENT)) {
                 event.setState(EventState.CANCELED);
             }
-        }
-        if (updateEventAdminDto.getEventDate() != null) {
-            event.setEventDate(updateEventAdminDto.getEventDate());
         }
         return event;
     }

@@ -26,18 +26,20 @@ public interface TestMapper {
     @Named("setStateViaAdmin")
     static EventState setStateViaAdmin(UpdateEventAdminDto updateEventAdminDto) {
         EventState eventState = null;
-        if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.PUBLISH_EVENT)) {
-            eventState = EventState.PUBLISHED;
-        }
-        if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.REJECT_EVENT)) {
-            eventState = EventState.CANCELED;
+        if (updateEventAdminDto.getStateAction() != null) {
+            if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.PUBLISH_EVENT)) {
+                eventState = EventState.PUBLISHED;
+            }
+            if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.REJECT_EVENT)) {
+                eventState = EventState.CANCELED;
+            }
         }
         return eventState;
     }
 
     @Named("setPublishedOnViaAdmin")
     static LocalDateTime setPublishedOnViaAdmin(UpdateEventAdminDto updateEventAdminDto) {
-        if (updateEventAdminDto.getStateAction().equals(StateActionForAdmin.PUBLISH_EVENT)) {
+        if (updateEventAdminDto.getStateAction() != null) {
             return LocalDateTime.now();
         }
         return null;
@@ -53,11 +55,15 @@ public interface TestMapper {
 
     @Named("setStateViaUser")
     static EventState setStateViaUser(UpdateEventUserDto updateEventUserDto) {
-        if (updateEventUserDto.getStateAction().equals(StateActionForUser.SEND_TO_REVIEW)) {
-            return EventState.PENDING;
-        } else {
-            return EventState.CANCELED;
+        EventState eventState = null;
+        if (updateEventUserDto.getStateAction() != null) {
+            if (updateEventUserDto.getStateAction().equals(StateActionForUser.SEND_TO_REVIEW)) {
+                eventState = EventState.PENDING;
+            } else {
+                eventState = EventState.CANCELED;
+            }
         }
+        return eventState;
     }
 
     EventFullDto toEventFullDto(Event event);
@@ -74,7 +80,7 @@ public interface TestMapper {
     @Mapping(target = "category", expression = "java(category != null ? " +
             "category : event.getCategory())")
     @Mapping(target = "description", expression = "java(updateEventAdminDto.getDescription() != null ? " +
-            "updateEventAdminDto.getDescription() : event.getAnnotation())")
+            "updateEventAdminDto.getDescription() : event.getDescription())")
     @Mapping(target = "location", expression = "java(updateEventAdminDto.getLocation() != null ? " +
             "updateEventAdminDto.getLocation() : event.getLocation())")
     @Mapping(target = "paid", expression = "java(updateEventAdminDto.getPaid() != null ? " +

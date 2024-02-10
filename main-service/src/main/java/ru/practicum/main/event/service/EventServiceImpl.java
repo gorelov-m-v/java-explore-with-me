@@ -16,7 +16,6 @@ import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.UpdateEventAdminDto;
 import ru.practicum.main.event.dto.UpdateEventUserDto;
 import ru.practicum.main.event.mapper.EventMapper;
-import ru.practicum.main.event.mapper.TestMapper;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.model.enums.EventState;
 import ru.practicum.main.event.model.enums.SortValue;
@@ -50,7 +49,6 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
-    private final TestMapper testMapper;
     private final UserRepository userRepository;
     private final StatClient statClient;
     private final EntityManager entityManager;
@@ -117,7 +115,7 @@ public class EventServiceImpl implements EventService {
         }
 
         return eventMapper.toEventFullDto(eventRepository.save(
-                testMapper.toEventByAdmin(updateEventAdminDto, event, category)));
+                eventMapper.toEventByAdmin(updateEventAdminDto, event, category)));
     }
 
     @Override
@@ -147,7 +145,7 @@ public class EventServiceImpl implements EventService {
         }
 
         return eventMapper.toEventFullDto(eventRepository.save(
-                testMapper.toEventByUser(updateEventUserDto, event, category)));
+                eventMapper.toEventByUser(updateEventUserDto, event, category)));
     }
 
     @Override

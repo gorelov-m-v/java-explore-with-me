@@ -1,0 +1,657 @@
+{
+  "info": {
+    "_postman_id": "8dd6ea20-2d70-4efe-80f8-4457fd7dd524",
+    "name": "modul3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27733445"
+  },
+  "item": [
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Позитивные тесты",
+          "item": [
+            {
+              "name": "Создание пользователя 1 Copy",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"test1\",\r\n    \"email\": \"test@email.ru\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/admin/users",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "admin",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Создание категории 1 Copy",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"testCategory\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/admin/categories",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "admin",
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Создание ивента 1 Copy",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"annotation\": \"оыадлрадвылмцщшуоажвырдвытажвыавоыдаваыжоыавдплва\",\r\n    \"category\": 1,\r\n    \"description\": \"fksdjhfkshdsfksldsdfsfddsfhfldssdvvfbdsfsf\",\r\n    \"location\": {\r\n        \"lat\": -60.8522,\r\n        \"lon\": -21.4306\r\n    },\r\n    \"paid\": false,\r\n    \"participantLimit\": 5,\r\n    \"requestModeration\": false,\r\n    \"title\": \"dgfdlksbnvcjchbnkv\",\r\n    \"eventDate\": \"2029-02-11 03:53:30\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/1/events",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "1",
+                    "events"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Юзер)Создание комментария",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Response status code is 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response is a valid JSON object\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response has properties id, text, userId, eventId, isDeleted, created, and updated\", function () {\r",
+                      "    var jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData).to.have.property('id');\r",
+                      "    pm.expect(jsonData).to.have.property('text');\r",
+                      "    pm.expect(jsonData).to.have.property('userId');\r",
+                      "    pm.expect(jsonData).to.have.property('eventId');\r",
+                      "    pm.expect(jsonData).to.have.property('isDeleted');\r",
+                      "    pm.expect(jsonData).to.have.property('created');\r",
+                      "    pm.expect(jsonData).to.have.property('updated');\r",
+                      "});\r",
+                      "\r",
+                      "let commentId = JSON.parse(responseBody).id;\r",
+                      "pm.collectionVariables.set('commentId', commentId);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"text\": \"Тестовый комментарий_20 букв\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/1/comments/events/1",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "1",
+                    "comments",
+                    "events",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Юзер)Апдейт комментария",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Response status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response is an object with specific properties\", function () {\r",
+                      "    var jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData).to.be.an('object');\r",
+                      "    pm.expect(jsonData).to.have.property('id');\r",
+                      "    pm.expect(jsonData).to.have.property('text');\r",
+                      "    pm.expect(jsonData).to.have.property('userId');\r",
+                      "    pm.expect(jsonData).to.have.property('eventId');\r",
+                      "    pm.expect(jsonData).to.have.property('isDeleted');\r",
+                      "    pm.expect(jsonData).to.have.property('created');\r",
+                      "    pm.expect(jsonData).to.have.property('updated');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"text\": \"Тестовый комментарий_25букв\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/1/comments/1",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "1",
+                    "comments",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Юзер)Удаление комментария",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Response status code is 204\", function () {\r",
+                      "    pm.response.to.have.status(204);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response has no content\", function () {\r",
+                      "    pm.expect(pm.response.text()).to.be.empty;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"text\": \"Тестовый комментарий_25букв\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/1/comments/{{commentId}}",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "1",
+                    "comments",
+                    "{{commentId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Юзер)Создание запасного комментария",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Response status code is 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response is a valid JSON object\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response has properties id, text, userId, eventId, isDeleted, created, and updated\", function () {\r",
+                      "    var jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData).to.have.property('id');\r",
+                      "    pm.expect(jsonData).to.have.property('text');\r",
+                      "    pm.expect(jsonData).to.have.property('userId');\r",
+                      "    pm.expect(jsonData).to.have.property('eventId');\r",
+                      "    pm.expect(jsonData).to.have.property('isDeleted');\r",
+                      "    pm.expect(jsonData).to.have.property('created');\r",
+                      "    pm.expect(jsonData).to.have.property('updated');\r",
+                      "});\r",
+                      "\r",
+                      "let commentId = JSON.parse(responseBody).id;\r",
+                      "pm.collectionVariables.set('commentId', commentId);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"text\": \"Тестовый комментарий_20 букв\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/1/comments/events/1",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "1",
+                    "comments",
+                    "events",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Юзер)Получение всех неудаленных комментария юзера",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Response status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response is an array of objects\", function () {\r",
+                      "    pm.expect(pm.response.json()).to.be.an('array').that.is.not.empty;\r",
+                      "    pm.response.json().forEach(function(comment) {\r",
+                      "        pm.expect(comment).to.be.an('object');\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Each comment object has required properties\", function () {\r",
+                      "    pm.response.json().forEach(function(comment) {\r",
+                      "        pm.expect(comment).to.have.property('id');\r",
+                      "        pm.expect(comment).to.have.property('text');\r",
+                      "        pm.expect(comment).to.have.property('userId');\r",
+                      "        pm.expect(comment).to.have.property('eventId');\r",
+                      "        pm.expect(comment).to.have.property('isDeleted');\r",
+                      "        pm.expect(comment).to.have.property('created');\r",
+                      "    });\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"text\": \"Тестовый комментарий_25букв\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/1/comments/?from=0&size=24",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "1",
+                    "comments",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "24"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Админ) Получение всех комментариев пользователя.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response is an array of objects with specific properties\", function () {\r",
+                      "    var jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData).to.be.an('array');\r",
+                      "    jsonData.forEach(function(comment) {\r",
+                      "        pm.expect(comment).to.have.property('id');\r",
+                      "        pm.expect(comment).to.have.property('text');\r",
+                      "        pm.expect(comment).to.have.property('created');\r",
+                      "        pm.expect(comment).to.have.property('userId');\r",
+                      "        pm.expect(comment).to.have.property('eventId');\r",
+                      "    });\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:8080/admin/comments/user/1?from=0&size=24",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "admin",
+                    "comments",
+                    "user",
+                    "1"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "24"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Админ) Получение комментария",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Response status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response is an object with id, text, userId, eventId, isDeleted, created, and updated properties\", function () {",
+                      "    pm.expect(pm.response.json()).to.be.an('object').that.has.all.keys('id', 'text', 'userId', 'eventId', 'isDeleted', 'created', 'updated');",
+                      "});",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:8080/admin/comments/1",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "admin",
+                    "comments",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Паблик) Получение комментариев по ивенту",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Response status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response is an array of objects\", function () {\r",
+                      "    pm.expect(pm.response.json()).to.be.an('array').that.is.not.empty;\r",
+                      "    pm.response.json().forEach(function(comment) {\r",
+                      "        pm.expect(comment).to.be.an('object');\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Each comment object has required properties\", function () {\r",
+                      "    pm.response.json().forEach(function(comment) {\r",
+                      "        pm.expect(comment).to.have.property('id');\r",
+                      "        pm.expect(comment).to.have.property('text');\r",
+                      "        pm.expect(comment).to.have.property('userId');\r",
+                      "        pm.expect(comment).to.have.property('eventId');\r",
+                      "        pm.expect(comment).to.have.property('isDeleted');\r",
+                      "        pm.expect(comment).to.have.property('created');\r",
+                      "        pm.expect(comment).to.have.property('updated');\r",
+                      "    });\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:8080/comments/events/1",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "comments",
+                    "events",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Негативные тесты",
+          "item": [
+            {
+              "name": "(Юзер)Апдейт коммента несуществующим юзером",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {",
+                      "    pm.response.to.have.status(404);",
+                      "});",
+                      "",
+                      "pm.test(\"Response is an object with message, reason, status, and timestamp properties\", function () {",
+                      "    pm.expect(pm.response.json()).to.be.an('object').that.has.all.keys('message', 'reason', 'status', 'timestamp');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"text\": \"Тестовый комментарий_25букв\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/100000/comments/3",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "100000",
+                    "comments",
+                    "3"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "(Юзер)Апдейт несуществующего комментария",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response is an object with message, reason, status, and timestamp properties\", function () {\r",
+                      "    pm.expect(pm.response.json()).to.be.an('object').that.has.all.keys('message', 'reason', 'status', 'timestamp');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"text\": \"Тестовый комментарий_25букв\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/users/1/comments/300000000",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "users",
+                    "1",
+                    "comments",
+                    "300000000"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "commentId",
+      "value": ""
+    }
+  ]
+}

@@ -27,10 +27,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/admin/users",
+                  "raw": "localhost:8080/admin/users",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "admin",
                     "users"
@@ -54,10 +55,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/admin/categories",
+                  "raw": "localhost:8080/admin/categories",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "admin",
                     "categories"
@@ -81,10 +83,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/1/events",
+                  "raw": "localhost:8080/users/1/events",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "1",
@@ -140,10 +143,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/1/comments/events/1",
+                  "raw": "localhost:8080/users/1/comments/events/1",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "1",
@@ -195,10 +199,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/1/comments/1",
+                  "raw": "localhost:8080/users/1/comments/1",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "1",
@@ -241,10 +246,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/1/comments/{{commentId}}",
+                  "raw": "localhost:8080/users/1/comments/{{commentId}}",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "1",
@@ -301,10 +307,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/1/comments/events/1",
+                  "raw": "localhost:8080/users/1/comments/events/1",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "1",
@@ -365,10 +372,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/1/comments/?from=0&size=24",
+                  "raw": "localhost:8080/users/1/comments/?from=0&size=24",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "1",
@@ -420,10 +428,11 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/admin/comments/user/1?from=0&size=24",
+                  "raw": "localhost:8080/admin/comments/user/1?from=0&size=24",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "admin",
                     "comments",
@@ -468,10 +477,11 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/admin/comments/1",
+                  "raw": "localhost:8080/admin/comments/1",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "admin",
                     "comments",
@@ -520,10 +530,11 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/comments/events/1",
+                  "raw": "localhost:8080/comments/events/1",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "comments",
                     "events",
@@ -570,10 +581,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/100000/comments/3",
+                  "raw": "localhost:8080/users/100000/comments/3",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "100000",
@@ -616,10 +628,11 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/1/comments/300000000",
+                  "raw": "localhost:8080/users/1/comments/300000000",
                   "host": [
-                    "{{baseUrl}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "users",
                     "1",
